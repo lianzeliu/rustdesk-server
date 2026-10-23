@@ -68,6 +68,11 @@ openssl-sys = { version = "0.9", features = ["vendored"] }
 
 [build-dependencies]
 hbb_common = { path = "libs/hbb_common" }
+# hbb_common enables native-tls -> openssl-sys, which is also compiled for the
+# HOST when building build.rs. With resolver v2, cross-compiling does not unify
+# its features with the [dependencies] edge above, so the host build fell back
+# to a pkg-config probe and failed. Enable vendored here too.
+openssl-sys = { version = "0.9", features = ["vendored"] }
 
 [workspace]
 members = ["libs/hbb_common"]
