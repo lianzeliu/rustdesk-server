@@ -60,6 +60,8 @@ reqwest = { git = "https://github.com/rustdesk-org/reqwest", features = ["blocki
 
 [target.'cfg(not(any(target_os = "macos", target_os = "windows")))'.dependencies]
 reqwest = { git = "https://github.com/rustdesk-org/reqwest", features = ["blocking", "socks", "json", "rustls-tls", "rustls-tls-native-roots", "gzip"], default-features=false }
+# Vendored openssl for musl cross-compilation (avoids system openssl dependency)
+openssl = { version = "0.10", features = ["vendored"], optional = false }
 
 [build-dependencies]
 hbb_common = { path = "libs/hbb_common" }
