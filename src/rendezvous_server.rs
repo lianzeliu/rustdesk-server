@@ -393,7 +393,7 @@ impl RendezvousServer {
                     }
                     let id = rk.id;
                     let ip = addr.ip().to_string();
-                    if id.len() < 6 || id.len() > MAX_PEER_ID_LEN {
+                    if id.len() < 3 || id.len() > MAX_PEER_ID_LEN {
                         return send_rk_res(socket, addr, UUID_MISMATCH).await;
                     } else if !self.check_ip_blocker(&ip, &id).await {
                         return send_rk_res(socket, addr, TOO_FREQUENT).await;
