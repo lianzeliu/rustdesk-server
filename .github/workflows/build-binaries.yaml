@@ -1,0 +1,41 @@
+name: build-binaries
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build hbbs/hbbr (x86_64)
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-musl
+
+      - name: Install musl tools
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+
+      - name: Build hbbs
+        run: cargo build --release --bin hbbs --target x86_64-unknown-linux-musl
+
+      - name: Build hbbr
+        run: cargo build --release --bin hbbr --target x86_64-unknown-linux-musl
+
+      - name: Upload hbbs
+        uses: actions/upload-artifact@v4
+        with:
+          name: hbbs-x86_64
+          path: target/x86_64-unknown-linux-musl/release/hbbs
+
+      - name: Upload hbbr
+        uses: actions/upload-artifact@v4
+        with:
+          name: hbbr-x86_64
+          path: target/x86_64-unknown-linux-musl/release/hbbr
