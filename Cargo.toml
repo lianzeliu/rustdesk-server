@@ -60,8 +60,11 @@ reqwest = { git = "https://github.com/rustdesk-org/reqwest", features = ["blocki
 
 [target.'cfg(not(any(target_os = "macos", target_os = "windows")))'.dependencies]
 reqwest = { git = "https://github.com/rustdesk-org/reqwest", features = ["blocking", "socks", "json", "rustls-tls", "rustls-tls-native-roots", "gzip"], default-features=false }
-# Vendored openssl for musl cross-compilation (avoids system openssl dependency)
-openssl = { version = "0.10", features = ["vendored"], optional = false }
+# Vendored openssl for musl cross-compilation: openssl-sys with vendored is enabled
+# globally here so ALL reverse deps (e.g. native-tls via tungstenite/hbb_common) build
+# a static OpenSSL instead of probing the system with pkg-config. Adding `openssl`
+# alone does not cover native-tls's own openssl-sys dependency.
+openssl-sys = { version = "0.9", features = ["vendored"] }
 
 [build-dependencies]
 hbb_common = { path = "libs/hbb_common" }
