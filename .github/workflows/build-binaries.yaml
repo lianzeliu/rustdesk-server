@@ -49,3 +49,20 @@ jobs:
         with:
           name: hbbr-${{ matrix.arch }}
           path: target/${{ matrix.target }}/release/hbbr
+
+      - name: Find and upload libgcc_s
+        run: |
+          LIBGCC=$(find / -name "libgcc_s.so.1" -path "*aarch64*" 2>/dev/null | head -1)
+          if [ -z "$LIBGCC" ] && [ "${{ matrix.arch }}" = "x86_64" ]; then
+            LIBGCC=$(find / -name "libgcc_s.so.1" -path "*x86_64*" 2>/dev/null | head -1)
+          fi
+          echo "Found: $LIBGCC"
+          mkdir -p /tmp/libgcc && cp "$LIBGCC" /tmp/libgcc/ || echo "not found"
+        continue-on-error: true
+
+      - name: Upload libgcc_s
+        uses: actions/upload-artifact@v4
+        with:
+          name: libgcc_s-${{ matrix.arch }}
+          path: /tmp/libgcc/
+        continue-on-error: true
