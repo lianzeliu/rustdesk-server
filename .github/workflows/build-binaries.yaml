@@ -35,12 +35,12 @@ jobs:
       - name: Build hbbs
         run: cross build --release --bin hbbs --target ${{ matrix.target }}
         env:
-          RUSTFLAGS: "-C target-feature=-crt-static"
+          RUSTFLAGS: "-C target-feature=-crt-static -C link-arg=-static-libgcc"
 
       - name: Build hbbr
         run: cross build --release --bin hbbr --target ${{ matrix.target }}
         env:
-          RUSTFLAGS: "-C target-feature=-crt-static"
+          RUSTFLAGS: "-C target-feature=-crt-static -C link-arg=-static-libgcc"
 
       - name: Upload hbbs
         uses: actions/upload-artifact@v4
