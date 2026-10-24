@@ -34,9 +34,13 @@ jobs:
 
       - name: Build hbbs
         run: cross build --release --bin hbbs --target ${{ matrix.target }}
+        env:
+          RUSTFLAGS: "-C link-arg=-static-pie"
 
       - name: Build hbbr
         run: cross build --release --bin hbbr --target ${{ matrix.target }}
+        env:
+          RUSTFLAGS: "-C link-arg=-static-pie"
 
       - name: Upload hbbs
         uses: actions/upload-artifact@v4
